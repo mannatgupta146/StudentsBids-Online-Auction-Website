@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Auctions{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; 
+        }
+        .navbar {
+            background-color: #558593; 
+            border-radius: 50px;
+            padding: 10px 30px;
+        }
+        .navbar-brand {
+            font-size: 34px;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .nav-link {
+            color: #fff !important; /* White text color for the links */
+            font-size: 23px;
+            font-weight: normal;
+        }
+        .logo-circle {
+            border-radius: 50%; 
+            overflow: hidden; 
+            border: 2px solid white; 
+            margin-right: 10px; 
+        }
+        .btn-primary {
+            background-color: #248eff !important; 
+            border-color: #248eff !important;
+        }
+        .custom-container {
+            max-width: 1850px; /* Set your desired maximum width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img class="logo-circle" src="https://w7.pngwing.com/pngs/117/903/png-transparent-computer-icons-bidding-auction-business-service-bid-angle-trademark-service-thumbnail.png" alt="Logo" height="60">
+            Auction
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{% url 'displayWatchlist' %}">
+                            Watchlist
+                            {% with watchlist_count=user.listingWatchlist.count %}
+                                {% if watchlist_count > 0 %}
+                                    <span class="badge badge-light">{{ watchlist_count }}</span>
+                                {% endif %}
+                            {% endwith %}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item mx-2">
+                        <span class="navbar-text mx-3" style="color: white;font-size: 24px;font-style: italic;">
+                            Hello, {{ user.username }}
+                        </span>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link btn btn-primary" href="{% url 'logout' %}" style="border-radius: 30px;">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item mx-2" style="border-radius: 20px;">
+                        <a class="nav-link btn btn-primary" href="{% url 'login' %}" style="padding: 8px 20px;border-radius: 20px;">Log In</a>
+                    </li>
+                    <li class="nav-item mx-2" style="border-radius: 20px;">
+                        <a class="nav-link btn btn-primary" href="{% url 'register' %}" style="padding: 8px 20px;border-radius: 20px;">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container custom-container mt-4">
+        {% block body %}
+        {% endblock %}
+    </div>
+</body>
+</html>

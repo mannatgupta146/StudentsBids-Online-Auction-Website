@@ -1,0 +1,101 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <!-- //////////////////////////////////////////////////////////////// -->
+    <div class="container">
+        {% if message %}
+            {% if update %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <!-- //////////////////////////////////////////////////////////////// -->
+    {% if not listing.isActive and user == listing.price.user %}
+        <div class="alert alert-success" role="alert">
+            Congratulations! You Won the Auction!
+        </div>
+    {% endif %}
+    <!-- //////////////////////////////////////////////////////////////// -->
+    <div class="row mx-3">
+        {% if user.is_authenticated and listing.isActive %}
+            {% if isOwner %}
+                {% if not listing.price.user == user %}
+                    <!-- Only show bid form to users other than the auction owner -->
+                    <form action="{% url 'addBid' id=listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3 mx-3">
+                            <label for="price" min="0" class="form-label">Add your Bid : </label>
+                            <input type="text" name="newBid" placeholder="Add a new Bid">
+                            <button type="submit" class="btn btn-warning ml-2 ">Add</button>
+                        </div>
+                    </form>
+                {% endif %}
+            {% endif %}
+            {% if isListingInWatchlist %}
+                <form action="{% url 'removeWatchlist' id=listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove From Watchlist</button>
+                </form>
+            {% else %}
+                <form action="{% url 'addWatchlist' id=listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Add to Watchlist</button>
+                </form>
+            {% endif %}
+        {% endif %}
+        {% if user.is_authenticated and isOwner %}
+            <!-- Only show close auction button to the auction owner -->
+            <form action="{% url 'closeAuction' id=listing.id %}" method="POST" class="mx-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Close Auction</button>
+            </form>
+        {% endif %}
+    </div>
+    <!-- //////////////////////////////////////////////////////////////// -->
+    <h2>Item: {{ listing.title }}</h2>
+    <img src="{{ listing.imageUrl }}" alt="{{ listing.title }}" height="350px">
+    <p>{{ listing.description }}</p>
+    <h4>Listed by: {{ listing.owner }}</h4>
+    <h4>Initial Price: ${{ listing.price.bid }}</h4>
+    <!-- ///////////////////////////////////////// -->
+    {% if user.is_authenticated and not isOwner %}
+        <!-- Show bid form to users other than the auction owner -->
+        <form action="{% url 'addBid' id=listing.id %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="price" min="0" class="form-label">Add Bid</label>
+                <input type="text" name="newBid" placeholder="Add New Bid">
+                <button type="submit" class="btn btn-warning ml-2">Add</button>
+            </div>
+        </form>
+    {% endif %}
+    <!-- ///////////////////////////////////////// -->
+    <h2>Comments</h2>
+    <br/>
+    {% if user.is_authenticated %}
+        <form action="{% url 'addComment' id=listing.id %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="price" class="form-label">Add Comment</label>
+                <input type="text" name="newComment" placeholder="Add New Comment">
+                <button type="submit" class="btn btn-success ml-2">Add</button>
+            </div>
+        </form>
+    {% endif %}
+    <br/>
+    <!-- ///////////////////////////////////////// -->
+    <ul class="list-group">
+        {% for comment in allComments %}
+            <li class="list-group-item">
+                <p>Posted by <strong>{{ comment.author }}</strong></p>
+                {{ comment.message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
