@@ -22,8 +22,8 @@ This web application allows you to perform the following actions:
 
 4. Run the Django server locally using:
    ```python manage.py runserver```.
-   The app will open in your web browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
-6. Follow the on-screen instructions to participate in or manage auctions.
+The app will open in your web browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+5. Follow the on-screen instructions to participate in or manage auctions.
 
 ## Screenshots
 
