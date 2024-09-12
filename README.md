@@ -15,9 +15,14 @@ This web application allows you to perform the following actions:
 ## How to Use
 
 1. Clone this repository to your local machine.
-2. Install the necessary dependencies by running `npm install`.
-3. Run the application locally using `npm start`. The app will open in your web browser at [http://localhost:8000](http://localhost:8000).
-4. Follow the on-screen instructions to participate in or manage auctions.
+2. Install the Python dependencies by running:
+    ```python -m pip install -r requirements.txt ```
+3. If it does work update using:
+  ``` python.exe -m pip install --upgrade pip ```
+4.Run the Django server locally using:
+   ```python manage.py runserver```
+5. Run the application locally using `npm start`. The app will open in your web browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+6. Follow the on-screen instructions to participate in or manage auctions.
 
 ## Screenshots
 
